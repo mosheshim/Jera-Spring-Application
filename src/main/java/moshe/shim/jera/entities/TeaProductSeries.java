@@ -1,9 +1,7 @@
 package moshe.shim.jera.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import moshe.shim.jera.payload.TeaProductSeriesDTO;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,6 +11,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 public class TeaProductSeries {
 
@@ -26,8 +25,18 @@ public class TeaProductSeries {
 
     private String prices;
 
-    private Boolean isTeaBags;
+    private Boolean isTeaBag;
 
     @OneToMany(mappedBy = "teaProductSeries", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Tea> teas = new HashSet<>();
+
+    public TeaProductSeriesDTO toDTO(){
+        return TeaProductSeriesDTO.builder()
+                .id(id)
+                .name(name)
+                .description(description)
+                .prices(prices)
+                .isTeaBag(isTeaBag)
+                .build();
+    }
 }

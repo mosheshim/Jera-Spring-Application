@@ -19,13 +19,12 @@ public class CoffeeServiceImpl implements CoffeeService {
 
     @Override
     public CoffeeDTO addCoffee(CoffeeDTO dto){
-        Coffee coffee = repo.save(dto.fromDTO());
-        return coffee.toDTO();
+        return repo.save(dto.fromDTO()).toDTO();
     }
 
     @Override
     public List<CoffeeDTO> getAllCoffee(){
-        return repo.findAll().stream().map(Coffee::toDTO
-        ).collect(Collectors.toList());
+        return repo.findAll().stream().map(Coffee::toDTO)
+                .collect(Collectors.toList());
     }
 }
