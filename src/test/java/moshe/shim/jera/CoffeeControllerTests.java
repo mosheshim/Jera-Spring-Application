@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.linesOf;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -52,7 +53,7 @@ public class CoffeeControllerTests {
     @Test
     public void postCoffee_whenIdIsNotNull_receiveBadRequest(){
         var coffee = createValidCoffee();
-        coffee.setId("11234");
+        coffee.setId(234);
         var response = postCoffee(coffee, Object.class);
         assertThat(coffeeRepo.findById(coffee.getId())).isEmpty();
     }
@@ -146,6 +147,7 @@ public class CoffeeControllerTests {
         coffeeWithNullUrl.setSweetness(3);
         coffeeWithNullUrl.setAcidity(1);
         coffeeWithNullUrl.setBody(4);
+        coffeeWithNullUrl.setRoastingLevel(2);
         postCoffee(coffeeWithNullUrl, Object.class);
         assertThat(coffeeRepo.findAll().get(0).getImageUrl()).isNotNull();
     }
@@ -161,19 +163,19 @@ public class CoffeeControllerTests {
 
 
     public Coffee createValidCoffee() {
-        return new Coffee(
-                30,
-                "name of coffe",
-                "Url",
-                true,
-                "this is a description",
-                "Uganda",
-                5,
-                "Chocolate, Nuts, Banana",
-                5,
-                3,
-                2,
-                3
-        );
+        Coffee coffee = new Coffee();
+        coffee.setPrice(50);
+        coffee.setName("yummy coffe");
+        coffee.setImageUrl("image");
+        coffee.setInStock(true);
+        coffee.setDescription("this is coffe");
+        coffee.setCountryOfOrigin("Ugands");
+        coffee.setRoastingLevel(2);
+        coffee.setBitterness(4);
+        coffee.setSweetness(3);
+        coffee.setAcidity(2);
+        coffee.setBody(5);
+        coffee.setTasteProfile("honey, cacoa");
+        return coffee;
     }
 }

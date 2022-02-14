@@ -1,10 +1,8 @@
 package moshe.shim.jera.entities;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ValueGenerationType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -14,48 +12,34 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor()
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Product{
 
-    @JsonSerialize
     @Id()
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected long id;
 
     @CreationTimestamp
-    @JsonView
-    private Date uploadDate;
+    protected Date uploadDate;
 
     @NotNull
-    @JsonProperty
-    private int price;
+    protected int price;
 
     @NotNull
     @NotEmpty
-    @JsonProperty
-    private String name;
+    protected String name;
 
     @NotNull
-    @JsonProperty
-    private String imageUrl = "Default url";
+    protected String imageUrl;
 
     @NotNull
-    @JsonProperty
-    private Boolean inStock;
+    protected Boolean inStock;
 
     @NotNull
-    @JsonProperty
-    private String description;
+    protected String description;
 
-    public Product(int price, String name, String imageUrl, Boolean inStock, String description) {
-        this.price = price;
-        this.name = name;
-        this.imageUrl = imageUrl;
-        this.inStock = inStock;
-        this.description = description;
-    }
 }
 
 

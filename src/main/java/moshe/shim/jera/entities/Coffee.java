@@ -1,16 +1,20 @@
 package moshe.shim.jera.entities;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import moshe.shim.jera.payload.CoffeeDTO;
 import org.hibernate.validator.constraints.Range;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Coffee extends Product{
     public static final int LIGHT_ROAST = 1;
@@ -21,43 +25,50 @@ public class Coffee extends Product{
     @NotNull
     private String countryOfOrigin;
 
-    @Range(min = 0, max = 5)
+    @Range(min = 0, max = 3)
     @NotNull
-    private int roastingLevel;
+    private Integer roastingLevel;
 
     @NotNull
     private String tasteProfile;
 
     @Range(min = 0, max = 5)
     @NotNull
-    private int bitterness;
+    private Integer bitterness;
 
     @Range(min = 0, max = 5)
     @NotNull
-    private int sweetness;
+    private Integer sweetness;
 
     @Range(min = 0, max = 5)
     @NotNull
-    private int acidity;
+    private Integer acidity;
 
     @Range(min = 0, max = 5)
     @NotNull
-    private int body;
+    private Integer body;
+
 
     @Override
     public int hashCode() {
         return getClass().hashCode();
     }
 
-    public Coffee(@NotNull int price, @NotNull @NotEmpty String name, @NotNull String imageUrl, @NotNull Boolean inStock, @NotNull String description, String countryOfOrigin, int roastingLevel, String tasteProfile, int bitterness, int sweetness, int acidity, int body) {
-        super(price, name, imageUrl, inStock, description);
-        this.countryOfOrigin = countryOfOrigin;
-        this.roastingLevel = roastingLevel;
-        this.tasteProfile = tasteProfile;
-        this.bitterness = bitterness;
-        this.sweetness = sweetness;
-        this.acidity = acidity;
-        this.body = body;
+    public CoffeeDTO toDTO(){
+        var coffee = new CoffeeDTO();
+        coffee.setId(id);
+        coffee.setName(name);
+        coffee.setImageUrl(imageUrl);
+        coffee.setInStock(inStock);
+        coffee.setDescription(description);
+        coffee.setCountryOfOrigin(countryOfOrigin);
+        coffee.setTasteProfile(tasteProfile);
+        coffee.setRoastingLevel(roastingLevel);
+        coffee.setBitterness(bitterness);
+        coffee.setSweetness(sweetness);
+        coffee.setAcidity(acidity);
+        coffee.setBody(body);
+        return coffee;
     }
 
 }

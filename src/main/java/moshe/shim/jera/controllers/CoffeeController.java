@@ -1,11 +1,12 @@
 package moshe.shim.jera.controllers;
 
+import moshe.shim.jera.payload.CoffeeDTO;
 import moshe.shim.jera.services.CoffeeService;
-import moshe.shim.jera.services.impl.CoffeeServiceImpl;
 import moshe.shim.jera.entities.Coffee;
 import moshe.shim.jera.exceptions.APIErrorMessageDTO;
 import moshe.shim.jera.shared.GenericResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +26,12 @@ public class CoffeeController {
     }
 
     @PostMapping
-    public GenericResponse addCoffee(@Valid @RequestBody Coffee coffee){
-        service.addCoffee(coffee);
-        return GenericResponse.builder().message("coffee saved").build();
+    public ResponseEntity<CoffeeDTO> addCoffee(@Valid @RequestBody CoffeeDTO coffee){
+        return ResponseEntity.ok(service.addCoffee(coffee));
     }
 
     @GetMapping()
-    public List<Coffee> getAllCoffee(){
+    public List<CoffeeDTO> getAllCoffee(){
         return service.getAllCoffee();
     }
 
