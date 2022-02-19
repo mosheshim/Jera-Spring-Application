@@ -1,10 +1,13 @@
 package moshe.shim.jera.payload;
 
-import lombok.Builder;
-import lombok.Data;
-import moshe.shim.jera.entities.TeaProductSeries;
+import lombok.*;
 
-@Data
+import java.util.Set;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Builder
 public class TeaProductSeriesDTO {
 
@@ -18,13 +21,6 @@ public class TeaProductSeriesDTO {
 
     private Boolean isTeaBag;
 
-    public TeaProductSeries fromDTO(){
-        return TeaProductSeries.builder()
-                .id(id)
-                .name(name)
-                .description(description)
-                .prices(prices)
-                .isTeaBag(isTeaBag)
-                .build();
-    }
+    private Set<TeaDTO> teaList;
+
 }

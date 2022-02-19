@@ -4,8 +4,9 @@ import moshe.shim.jera.entities.Coffee;
 import moshe.shim.jera.payload.CoffeeDTO;
 
 import java.util.List;
+import java.util.Set;
 
 public interface CoffeeService {
-    public CoffeeDTO addCoffee(CoffeeDTO coffee);
-    public List<CoffeeDTO> getAllCoffee();
+    CoffeeDTO addCoffee(CoffeeDTO coffee);
+    Set<CoffeeDTO> getAllCoffee();
 }

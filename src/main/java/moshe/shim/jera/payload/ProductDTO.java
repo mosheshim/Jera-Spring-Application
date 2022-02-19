@@ -2,7 +2,10 @@ package moshe.shim.jera.payload;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.CreationTimestamp;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @SuperBuilder
@@ -11,19 +14,23 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public abstract class ProductDTO {
+public class ProductDTO {
     protected long id;
 
     protected Date uploadDate;
 
     protected int price;
 
+    @NotEmpty
     protected String name;
 
-    protected String imageUrl = "Default url";
+    @NotNull
+    protected String imageUrl;
 
-    protected Boolean inStock;
+    protected boolean inStock;
 
+    @NotEmpty
     protected String description;
+
 
 }

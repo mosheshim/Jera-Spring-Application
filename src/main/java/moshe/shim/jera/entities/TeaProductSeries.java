@@ -4,7 +4,9 @@ import lombok.*;
 import moshe.shim.jera.payload.TeaProductSeriesDTO;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -28,15 +30,6 @@ public class TeaProductSeries {
     private Boolean isTeaBag;
 
     @OneToMany(mappedBy = "teaProductSeries", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Tea> teas = new HashSet<>();
+    private Set<Tea> teaSet;
 
-    public TeaProductSeriesDTO toDTO(){
-        return TeaProductSeriesDTO.builder()
-                .id(id)
-                .name(name)
-                .description(description)
-                .prices(prices)
-                .isTeaBag(isTeaBag)
-                .build();
-    }
 }

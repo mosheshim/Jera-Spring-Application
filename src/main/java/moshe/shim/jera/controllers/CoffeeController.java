@@ -2,27 +2,23 @@ package moshe.shim.jera.controllers;
 
 import moshe.shim.jera.payload.CoffeeDTO;
 import moshe.shim.jera.services.CoffeeService;
-import moshe.shim.jera.entities.Coffee;
-import moshe.shim.jera.exceptions.APIErrorMessageDTO;
-import moshe.shim.jera.shared.GenericResponse;
-import org.springframework.http.HttpStatus;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Set;
 
 @RequestMapping("/api/1/coffee")
 @RestController
 public class CoffeeController {
+
     private final CoffeeService service;
 
-    public CoffeeController(CoffeeService service) {
+
+    public CoffeeController(CoffeeService service, ModelMapper modelMapper) {
         this.service = service;
+
     }
 
     @PostMapping
@@ -31,26 +27,26 @@ public class CoffeeController {
     }
 
     @GetMapping()
-    public List<CoffeeDTO> getAllCoffee(){
+    public Set<CoffeeDTO> getAllCoffee(){
         return service.getAllCoffee();
     }
 
-    @ExceptionHandler({MethodArgumentNotValidException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    APIErrorMessageDTO handleMethodArgumentNotValidException(
-            MethodArgumentNotValidException e, HttpServletRequest request){
-        var hashMap = new HashMap<String, String>();
-        var fieldsErrors = e.getBindingResult().getFieldErrors();
-        for (FieldError fieldsError : fieldsErrors) {
-            hashMap.put(fieldsError.getField(), fieldsError.getDefaultMessage());
-        }
-        return new APIErrorMessageDTO(
-                "Validation error",
-                HttpStatus.BAD_REQUEST.value(),
-                request.getServletPath(),
-                hashMap
-        );
-    }
+//    @ExceptionHandler({MethodArgumentNotValidException.class})
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    ValidationError handleMethodArgumentNotValidException(
+//            MethodArgumentNotValidException e, HttpServletRequest request){
+//        var hashMap = new HashMap<String, String>();
+//        var fieldsErrors = e.getBindingResult().getFieldErrors();
+//        for (FieldError fieldsError : fieldsErrors) {
+//            hashMap.put(fieldsError.getField(), fieldsError.getDefaultMessage());
+//        }
+//        return new ValidationError(
+//                "Validation error",
+//                HttpStatus.BAD_REQUEST.value(),
+//                request.getServletPath(),
+//                hashMap
+//        );
+//    }
 
 }
 

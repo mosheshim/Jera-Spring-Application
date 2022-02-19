@@ -13,6 +13,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -21,54 +22,26 @@ public class Coffee extends Product{
     public static final int MEDIUM_ROAST = 2;
     public static final int DARK_ROAST = 3;
 
+
     @NotEmpty
-    @NotNull
     private String countryOfOrigin;
 
-    @Range(min = 0, max = 3)
-    @NotNull
+    @Range(min = 1, max = 3)
     private Integer roastingLevel;
 
-    @NotNull
+    @NotEmpty
     private String tasteProfile;
 
     @Range(min = 0, max = 5)
-    @NotNull
     private Integer bitterness;
 
     @Range(min = 0, max = 5)
-    @NotNull
     private Integer sweetness;
 
     @Range(min = 0, max = 5)
-    @NotNull
     private Integer acidity;
 
     @Range(min = 0, max = 5)
-    @NotNull
     private Integer body;
-
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
-
-    public CoffeeDTO toDTO(){
-        var coffee = new CoffeeDTO();
-        coffee.setId(id);
-        coffee.setName(name);
-        coffee.setImageUrl(imageUrl);
-        coffee.setInStock(inStock);
-        coffee.setDescription(description);
-        coffee.setCountryOfOrigin(countryOfOrigin);
-        coffee.setTasteProfile(tasteProfile);
-        coffee.setRoastingLevel(roastingLevel);
-        coffee.setBitterness(bitterness);
-        coffee.setSweetness(sweetness);
-        coffee.setAcidity(acidity);
-        coffee.setBody(body);
-        return coffee;
-    }
 
 }

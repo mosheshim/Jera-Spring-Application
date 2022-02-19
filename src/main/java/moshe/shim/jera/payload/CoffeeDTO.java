@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import moshe.shim.jera.entities.Coffee;
+import org.hibernate.validator.constraints.Range;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 
 @AllArgsConstructor
@@ -14,35 +18,27 @@ import moshe.shim.jera.entities.Coffee;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CoffeeDTO extends ProductDTO{
 
+
+    @NotEmpty
     private String countryOfOrigin;
 
-    private String tasteProfile;
-
+    @Range(min = 0, max = 3)
     private Integer roastingLevel;
 
+    @NotEmpty
+    private String tasteProfile;
+
+    @Range(min = 0, max = 5)
     private Integer bitterness;
 
+    @Range(min = 0, max = 5)
     private Integer sweetness;
 
+    @Range(min = 0, max = 5)
     private Integer acidity;
 
+    @Range(min = 0, max = 5)
     private Integer body;
 
-    public Coffee fromDTO(){
-        var coffee = new Coffee();
-        coffee.setId(id);
-        coffee.setUploadDate(uploadDate);
-        coffee.setName(name);
-        coffee.setImageUrl(imageUrl);
-        coffee.setInStock(inStock);
-        coffee.setDescription(description);
-        coffee.setCountryOfOrigin(countryOfOrigin);
-        coffee.setTasteProfile(tasteProfile);
-        coffee.setRoastingLevel(roastingLevel);
-        coffee.setBitterness(bitterness);
-        coffee.setSweetness(sweetness);
-        coffee.setAcidity(acidity);
-        coffee.setBody(body);
-        return coffee;
-    }
+
 }
