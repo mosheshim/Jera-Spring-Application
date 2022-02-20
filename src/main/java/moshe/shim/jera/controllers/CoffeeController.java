@@ -2,21 +2,23 @@ package moshe.shim.jera.controllers;
 
 import moshe.shim.jera.payload.CoffeeDTO;
 import moshe.shim.jera.services.CoffeeService;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Set;
 
-@RequestMapping("/api/1/coffee")
+import static moshe.shim.jera.controllers.CoffeeController.API_1_COFFEE;
+
+@RequestMapping(API_1_COFFEE)
 @RestController
 public class CoffeeController {
+    public final static String API_1_COFFEE = "/api/1/coffee";
 
     private final CoffeeService service;
 
 
-    public CoffeeController(CoffeeService service, ModelMapper modelMapper) {
+    public CoffeeController(CoffeeService service) {
         this.service = service;
 
     }
@@ -27,26 +29,25 @@ public class CoffeeController {
     }
 
     @GetMapping()
-    public Set<CoffeeDTO> getAllCoffee(){
-        return service.getAllCoffee();
+    public ResponseEntity<Set<CoffeeDTO>> getAllCoffee(){
+        return ResponseEntity.ok(service.getAllCoffee());
     }
 
-//    @ExceptionHandler({MethodArgumentNotValidException.class})
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    ValidationError handleMethodArgumentNotValidException(
-//            MethodArgumentNotValidException e, HttpServletRequest request){
-//        var hashMap = new HashMap<String, String>();
-//        var fieldsErrors = e.getBindingResult().getFieldErrors();
-//        for (FieldError fieldsError : fieldsErrors) {
-//            hashMap.put(fieldsError.getField(), fieldsError.getDefaultMessage());
-//        }
-//        return new ValidationError(
-//                "Validation error",
-//                HttpStatus.BAD_REQUEST.value(),
-//                request.getServletPath(),
-//                hashMap
-//        );
-//    }
+    @GetMapping("/{id}")
+    public ResponseEntity<CoffeeDTO> getCoffeeById(@PathVariable long id){
+        return ResponseEntity.ok(service.getCoffeeById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CoffeeDTO> updateCoffeeById(@PathVariable long id, @Valid @RequestBody CoffeeDTO dto){
+        return ResponseEntity.ok(service.updateCoffeeById(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCoffeeById(@PathVariable long id){
+        return ResponseEntity.ok(service.deleteById(id));
+    }
+
 
 }
 

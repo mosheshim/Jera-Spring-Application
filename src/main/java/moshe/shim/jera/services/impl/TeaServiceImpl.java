@@ -3,21 +3,18 @@ package moshe.shim.jera.services.impl;
 import lombok.val;
 import moshe.shim.jera.entities.Tea;
 import moshe.shim.jera.entities.TeaProductSeries;
-import moshe.shim.jera.exceptions.ResourceNotFound;
+import moshe.shim.jera.exceptions.ResourceNotFoundException;
 import moshe.shim.jera.payload.TeaDTO;
-import moshe.shim.jera.payload.Weight;
+import moshe.shim.jera.models.Weight;
 import moshe.shim.jera.repositories.TeaProductSeriesRepository;
 import moshe.shim.jera.repositories.TeaRepository;
 import moshe.shim.jera.services.TeaService;
 import moshe.shim.jera.utils.Mappers;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.Provider;
 import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,7 +37,7 @@ public class TeaServiceImpl implements TeaService {
     @Override
     public TeaDTO addTea(long id, TeaDTO dto) throws RuntimeException {
         val teaProductSeries = teaProductSeriesRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFound(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "ProductSeries",
                         "id",
                         id,

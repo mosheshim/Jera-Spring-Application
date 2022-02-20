@@ -27,9 +27,11 @@ public class TeaProductSeries {
 
     private String prices;
 
+    @Column(name = "is_tea_bag")
     private Boolean isTeaBag;
 
     @OneToMany(mappedBy = "teaProductSeries", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "tea_list")
     private Set<Tea> teaSet;
 
 }

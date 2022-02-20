@@ -1,4 +1,4 @@
-package moshe.shim.jera.payload;
+package moshe.shim.jera.models;
 
 import lombok.*;
 

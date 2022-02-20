@@ -12,16 +12,15 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 @ControllerAdvice
 public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(ResourceNotFound.class)
+    @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorDetailsDTO> handleResourceNotFoundException(
-            ResourceNotFound exc) {
+            ResourceNotFoundException exc) {
         val details = String.format(
                 "%s Not Found, Field: %s, Value: %s",
                 exc.getResourceName(),

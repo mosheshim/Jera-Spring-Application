@@ -2,11 +2,8 @@ package moshe.shim.jera.utils;
 
 import lombok.val;
 import moshe.shim.jera.entities.Tea;
-import moshe.shim.jera.entities.TeaProductSeries;
 import moshe.shim.jera.payload.TeaDTO;
-import moshe.shim.jera.payload.TeaProductSeriesDTO;
-import moshe.shim.jera.payload.Weight;
-import org.springframework.beans.factory.annotation.Autowired;
+import moshe.shim.jera.models.Weight;
 
 import java.util.*;
 import java.util.stream.Collectors;

@@ -1,8 +1,7 @@
-package moshe.shim.jera.payload;
+package moshe.shim.jera.models;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -12,9 +11,10 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@EqualsAndHashCode
 @Setter
 @ToString
-public class ProductDTO {
+public class ProductDTOModel {
     protected long id;
 
     protected Date uploadDate;

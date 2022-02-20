@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "shim.mosh.jwt.secret",
+      "type": "java.lang.String",
+      "description": "Description for shim.mosh.jwt.secret."
+    },
+    {
+      "name": "shim.mosh.jwt.expires",
+      "type": "java.lang.Long",
+      "description": "Description for shim.mosh.jwt.expires."
+    }
+  ] }

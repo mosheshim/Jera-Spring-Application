@@ -6,8 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
-@RequestMapping("/api/1/tea-product-series")
+@RequestMapping("/api/1/product-series")
 @RestController
 public class TeaProductSeriesController {
 
@@ -23,7 +24,7 @@ public class TeaProductSeriesController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TeaProductSeriesDTO>> getTeaProductSeries(){
+    public ResponseEntity<Set<TeaProductSeriesDTO>> getTeaProductSeries(){
         return ResponseEntity.ok(service.getAllTeaProductSeries());
     }
 }

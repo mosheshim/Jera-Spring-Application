@@ -3,8 +3,9 @@ package moshe.shim.jera.services;
 import moshe.shim.jera.payload.TeaProductSeriesDTO;
 
 import java.util.List;
+import java.util.Set;
 
 public interface TeaProductSeriesService {
     TeaProductSeriesDTO addTeaProductSeries(TeaProductSeriesDTO teaProductSeriesDTO);
-    List<TeaProductSeriesDTO> getAllTeaProductSeries();
+    Set<TeaProductSeriesDTO> getAllTeaProductSeries();
 }

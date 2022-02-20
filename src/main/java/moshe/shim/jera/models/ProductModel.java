@@ -1,14 +1,11 @@
-package moshe.shim.jera.entities;
+package moshe.shim.jera.models;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.ValueGenerationType;
-import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Getter
@@ -17,13 +14,14 @@ import java.util.Date;
 @AllArgsConstructor
 @SuperBuilder
 @MappedSuperclass
-public class Product{
+public class ProductModel {
 
     @Id()
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
     @CreationTimestamp
+    @Column(name = "upload_date", nullable = false)
     protected Date uploadDate;
 
     protected int price;
@@ -31,10 +29,11 @@ public class Product{
     @NotEmpty
     protected String name;
 
-    @NotEmpty
     @Builder.Default
+    @Column(name = "image_url")
     protected String imageUrl ="default url";
 
+    @Column(name = "in_stock")
     protected boolean inStock;
 
     @NotEmpty
