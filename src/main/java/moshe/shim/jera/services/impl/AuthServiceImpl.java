@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
                 .email(signUpDTO.getEmail())
                 .name(signUpDTO.getName())
                 .password(encodedPassword)
-                .roles(Collections.singleton(getUserRole(Role.ROLE_USER)))
+                .roles(Collections.singleton(getUserRole(Role.ROLE_ADMIN))) //TODO change to USER
                 .build();
         return toUserDTO.map(userRepository.save(user));
     }
@@ -73,19 +73,6 @@ public class AuthServiceImpl implements AuthService {
     private Role getUserRole(String role) { //TODO make as enum
         return roleRepository.findByName(role).orElseGet(() ->
                 roleRepository.save(Role.builder().name(role).build()));
-    }
-
-    private String buildJWT(String email) {
-        val expires = environment.getProperty("shim.mosh.jwt.expires", Long.class);
-        val secret = environment.getProperty("shim.mosh.jwt.secret");
-        if (expires == null || secret == null)
-            throw new NullPointerException("Secret JWT key or JWT Expires setting is not in properties");
-
-        return JWT.create()
-                .withExpiresAt(new Date(System.currentTimeMillis() + expires) )
-                .withSubject(email)
-                .sign(Algorithm.HMAC512(secret));
-
     }
 
     @Override
@@ -104,4 +91,19 @@ public class AuthServiceImpl implements AuthService {
 
         return toUserDTO.map(user);
     }
+
+    private String buildJWT(String email) {
+        val expires = environment.getProperty("shim.mosh.jwt.expires", Long.class);
+        val secret = environment.getProperty("shim.mosh.jwt.secret");
+        if (expires == null || secret == null)
+            throw new NullPointerException("Secret JWT key or JWT Expires setting is not in properties");
+
+        return JWT.create()
+                .withExpiresAt(new Date(System.currentTimeMillis() + expires) )
+                .withSubject(email)
+                .sign(Algorithm.HMAC512(secret));
+
+    }
+
+
 }

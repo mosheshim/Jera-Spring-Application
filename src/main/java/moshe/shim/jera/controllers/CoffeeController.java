@@ -2,7 +2,10 @@ package moshe.shim.jera.controllers;
 
 import moshe.shim.jera.payload.CoffeeDTO;
 import moshe.shim.jera.services.CoffeeService;
+import org.springframework.context.annotation.Role;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,10 +28,10 @@ public class CoffeeController {
 
     @PostMapping
     public ResponseEntity<CoffeeDTO> addCoffee(@Valid @RequestBody CoffeeDTO coffee){
-        return ResponseEntity.ok(service.addCoffee(coffee));
+        return new ResponseEntity<>(service.addCoffee(coffee), HttpStatus.CREATED);
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<Set<CoffeeDTO>> getAllCoffee(){
         return ResponseEntity.ok(service.getAllCoffee());
     }
@@ -39,13 +42,13 @@ public class CoffeeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CoffeeDTO> updateCoffeeById(@PathVariable long id, @Valid @RequestBody CoffeeDTO dto){
-        return ResponseEntity.ok(service.updateCoffeeById(id, dto));
+    public ResponseEntity<String> updateCoffeeById(@PathVariable long id, @Valid @RequestBody CoffeeDTO dto){
+        return new ResponseEntity<>(service.updateCoffeeById(id, dto), HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCoffeeById(@PathVariable long id){
-        return ResponseEntity.ok(service.deleteById(id));
+        return new ResponseEntity<>(service.deleteById(id), HttpStatus.NO_CONTENT);
     }
 
 

@@ -8,4 +8,5 @@ import java.util.Set;
 public interface TeaProductSeriesService {
     TeaProductSeriesDTO addTeaProductSeries(TeaProductSeriesDTO teaProductSeriesDTO);
     Set<TeaProductSeriesDTO> getAllTeaProductSeries();
+    TeaProductSeriesDTO getProductSeriesByID(long id);
 }

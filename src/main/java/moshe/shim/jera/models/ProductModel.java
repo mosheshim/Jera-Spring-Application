@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Getter
@@ -14,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @SuperBuilder
 @MappedSuperclass
-public class ProductModel {
+public abstract class ProductModel {
 
     @Id()
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,21 +25,49 @@ public class ProductModel {
     @Column(name = "upload_date", nullable = false)
     protected Date uploadDate;
 
-    protected int price;
+    @NotNull
+    protected Integer price;
 
-    @NotEmpty
+    @NotNull
     protected String name;
 
-    @Builder.Default
     @Column(name = "image_url")
-    protected String imageUrl ="default url";
+    @NotNull
+    protected String imageUrl;
 
-    @Column(name = "in_stock")
-    protected boolean inStock;
-
-    @NotEmpty
+    @NotNull
     protected String description;
 
+    @Column(name = "in_stock")
+    @NotNull
+    @Builder.Default
+    protected boolean inStock = false;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProductModel that = (ProductModel) o;
+
+        if (id == that.id) return true;
+        if (inStock != that.inStock) return false;
+        if (!price.equals(that.price)) return false;
+        if (!name.equals(that.name)) return false;
+        if (!imageUrl.equals(that.imageUrl)) return false;
+        return description.equals(that.description);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + price.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + imageUrl.hashCode();
+        result = 31 * result + description.hashCode();
+        result = 31 * result + (inStock ? 1 : 0);
+        return result;
+    }
 }
 
 

@@ -3,6 +3,7 @@ package moshe.shim.jera.services.impl;
 import lombok.val;
 import moshe.shim.jera.entities.Tea;
 import moshe.shim.jera.entities.TeaProductSeries;
+import moshe.shim.jera.exceptions.ResourceNotFoundException;
 import moshe.shim.jera.payload.TeaDTO;
 import moshe.shim.jera.payload.TeaProductSeriesDTO;
 import moshe.shim.jera.repositories.TeaProductSeriesRepository;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static moshe.shim.jera.controllers.CoffeeController.API_1_COFFEE;
 
 @Service
 public class TeaProductSeriesServiceImpl implements TeaProductSeriesService {
@@ -44,6 +47,14 @@ public class TeaProductSeriesServiceImpl implements TeaProductSeriesService {
     public Set<TeaProductSeriesDTO> getAllTeaProductSeries() {
         return repo.findAll().stream().map(toProductSeriesDTO::map).
                 collect(Collectors.toSet());
+    }
+
+    @Override
+    public TeaProductSeriesDTO getProductSeriesByID(long id) {
+        return toProductSeriesDTO.map(repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Product Series", "Id", id, API_1_COFFEE
+                )));
     }
 }
 

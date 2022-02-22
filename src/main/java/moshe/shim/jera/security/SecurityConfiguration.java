@@ -38,8 +38,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/1/coffee/**").permitAll()
+                .antMatchers("/api/1/coffee/**").hasRole("ADMIN")
+
                 .antMatchers(HttpMethod.GET, "/api/1/product-series/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/1/product-series/**").hasRole("ADMIN")
+
                 .antMatchers("/api/1/auth/**").permitAll()
+
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
 

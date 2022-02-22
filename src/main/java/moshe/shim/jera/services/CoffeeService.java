@@ -7,7 +7,7 @@ import java.util.Set;
 public interface CoffeeService {
     CoffeeDTO addCoffee(CoffeeDTO coffee);
     CoffeeDTO getCoffeeById(long id);
-    CoffeeDTO updateCoffeeById(long id, CoffeeDTO dto);
+    String updateCoffeeById(long id, CoffeeDTO dto);
     String deleteById(long id);
     Set<CoffeeDTO> getAllCoffee();
 

@@ -38,13 +38,14 @@ public class CoffeeServiceImpl implements CoffeeService {
     }
 
     @Override
-    public CoffeeDTO updateCoffeeById(long id, CoffeeDTO dto) {
-        findCoffeeById(id);
+    public String updateCoffeeById(long id, CoffeeDTO dto) {
+        CoffeeDTO coffeeById = findCoffeeById(id);
 
         Coffee coffee = toCoffee.map(dto);
         coffee.setId(id);
-
-        return toDTO.map(coffeeRepository.save(coffee));
+        coffee.setUploadDate(coffeeById.getUploadDate());
+        coffeeRepository.save(coffee);
+        return "Updated successfully";
 
     }
 
