@@ -18,6 +18,8 @@ target/
 *.iws
 *.iml
 *.ipr
+/home/moshe/HakerU/my-projects/spring/jera-spring/src/main/java/AppConfiguration.java
+/home/moshe/HakerU/my-projects/spring/jera-spring/src/main/resources/application.properties
 
 ### NetBeans ###
 /nbproject/private/
