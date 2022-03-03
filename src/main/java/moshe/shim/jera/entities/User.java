@@ -3,6 +3,7 @@ package moshe.shim.jera.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,22 +25,8 @@ public class User {
 
     private String name;
 
-    private String city;
-
-    private String street;
-
-    @Column(name = "house_number")
-    private String houseNumber;
-
-    private String zip;
-
-    private String floor;
-
-    private String apartment;
-
-    private String entrance;
-
-    private String phone;
+    @Embedded
+    private Address address;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
@@ -53,6 +40,6 @@ public class User {
                     referencedColumnName = "id"
             )
     )
-    private Set<Role> roles;
+    private List<Role> roles;
 
 }

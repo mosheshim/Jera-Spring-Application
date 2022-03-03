@@ -15,8 +15,8 @@ import javax.persistence.Id;
 @Getter
 @Setter
 public class Role {
-    public static String ROLE_USER = "ROLE_USER";
-    public static String ROLE_ADMIN = "ROLE_ADMIN";
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

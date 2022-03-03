@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Set;
 
 import static moshe.shim.jera.controllers.CoffeeController.API_1_COFFEE;
@@ -32,7 +33,7 @@ public class CoffeeController {
     }
 
     @GetMapping
-    public ResponseEntity<Set<CoffeeDTO>> getAllCoffee(){
+    public ResponseEntity<List<CoffeeDTO>> getAllCoffee(){
         return ResponseEntity.ok(service.getAllCoffee());
     }
 

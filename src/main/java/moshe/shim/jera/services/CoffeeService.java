@@ -2,6 +2,7 @@ package moshe.shim.jera.services;
 
 import moshe.shim.jera.payload.CoffeeDTO;
 
+import java.util.List;
 import java.util.Set;
 
 public interface CoffeeService {
@@ -9,6 +10,6 @@ public interface CoffeeService {
     CoffeeDTO getCoffeeById(long id);
     String updateCoffeeById(long id, CoffeeDTO dto);
     String deleteById(long id);
-    Set<CoffeeDTO> getAllCoffee();
+    List<CoffeeDTO> getAllCoffee();
 
 }

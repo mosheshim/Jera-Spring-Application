@@ -1,5 +1,7 @@
 package moshe.shim.jera.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -10,18 +12,22 @@ import java.util.Date;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 @Getter
 @Setter
+@EqualsAndHashCode
 @ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class ProductDTOModel {
+
+    @JsonIgnore
     protected Long id;
 
+    @JsonIgnore
     protected Date uploadDate;
 
-    protected int price;
+    protected Integer price;
 
-    @NotEmpty
+    @NotNull
     protected String name;
 
     @Builder.Default
@@ -29,32 +35,7 @@ public abstract class ProductDTOModel {
 
     protected boolean inStock;
 
-    @NotEmpty
+    @NotNull
     protected String description;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ProductDTOModel that = (ProductDTOModel) o;
-
-        if (id.equals(that.id)) return true;
-        if (price != that.price) return false;
-        if (inStock != that.inStock) return false;
-        if (!name.equals(that.name)) return false;
-        if (!imageUrl.equals(that.imageUrl)) return false;
-        return description.equals(that.description);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + price;
-        result = 31 * result + name.hashCode();
-        result = 31 * result + imageUrl.hashCode();
-        result = 31 * result + (inStock ? 1 : 0);
-        result = 31 * result + description.hashCode();
-        return result;
-    }
 }

@@ -10,7 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 
-@AllArgsConstructor
+@AllArgsConstructor()
 @NoArgsConstructor
 @Getter
 @Setter
@@ -45,6 +45,4 @@ public class CoffeeDTO extends ProductDTOModel {
     @NotNull
     @Range(min = 0, max = 5)
     private Integer body;
-
-
 }

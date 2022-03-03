@@ -7,8 +7,10 @@ import moshe.shim.jera.repositories.CoffeeRepository;
 import moshe.shim.jera.services.CoffeeService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,7 +31,7 @@ public class CoffeeServiceImpl implements CoffeeService {
 
     @Override
     public CoffeeDTO addCoffee(CoffeeDTO dto) {
-        return toDTO.map(coffeeRepository.save(toCoffee.map(dto)));
+            return toDTO.map(coffeeRepository.save(toCoffee.map(dto)));
     }
 
     @Override
@@ -51,15 +53,18 @@ public class CoffeeServiceImpl implements CoffeeService {
 
     @Override
     public String deleteById(long id) {
-        findCoffeeById(id);
-        coffeeRepository.deleteById(id);
-        return "Deleted successfully";
+       try {
+           coffeeRepository.deleteById(id);
+       }catch (EmptyResultDataAccessException e){
+           throw new ResourceNotFoundException("Coffee", "id", id, API_1_COFFEE);
+       }
+        return "Deleted Successfully";
     }
 
     @Override
-    public Set<CoffeeDTO> getAllCoffee() {
+    public List<CoffeeDTO> getAllCoffee() {
         return coffeeRepository.findAll().stream().map(toDTO::map)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     private CoffeeDTO findCoffeeById(long id){

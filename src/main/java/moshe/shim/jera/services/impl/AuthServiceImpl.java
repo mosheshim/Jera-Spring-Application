@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import javax.print.attribute.standard.Destination;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -65,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
                 .email(signUpDTO.getEmail())
                 .name(signUpDTO.getName())
                 .password(encodedPassword)
-                .roles(Collections.singleton(getUserRole(Role.ROLE_ADMIN))) //TODO change to USER
+                .roles(List.of(getUserRole(Role.ROLE_ADMIN))) //TODO change to USER
                 .build();
         return toUserDTO.map(userRepository.save(user));
     }

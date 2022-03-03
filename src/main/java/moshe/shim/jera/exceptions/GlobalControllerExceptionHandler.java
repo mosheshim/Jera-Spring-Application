@@ -36,6 +36,24 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ErrorDetailsDTO> handleValidationException(
+            ValidationException exc) {
+        val details = String.format(
+                "%s , Field: %s, Value: %s",
+                exc.getDetails(),
+                exc.getFieldName(),
+                exc.getFieldValue());
+        val error = ErrorDetailsDTO.builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .message("Illegal Value")
+                .details(details)
+                .path(exc.getPath())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {

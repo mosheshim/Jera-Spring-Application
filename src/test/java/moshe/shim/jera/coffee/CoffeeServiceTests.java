@@ -1,94 +1,85 @@
 package moshe.shim.jera.coffee;
 
+import moshe.shim.jera.TestUtils;
 import moshe.shim.jera.entities.Coffee;
 import moshe.shim.jera.exceptions.ResourceNotFoundException;
 import moshe.shim.jera.payload.CoffeeDTO;
 import moshe.shim.jera.repositories.CoffeeRepository;
 import moshe.shim.jera.services.CoffeeService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.TransactionSystemException;
+
+import javax.transaction.Transactional;
 import java.util.*;
 
+import static moshe.shim.jera.TestUtils.createValidCoffeeDTO;
+import static moshe.shim.jera.TestUtils.createValidCoffeeEntity;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-public class CoffeeServiceTests {
+@AutoConfigureTestEntityManager
+@Transactional
+public class CoffeeServiceTests{
 
     @Autowired
-    CoffeeRepository coffeeRepository;
+    private CoffeeService coffeeService;
     @Autowired
-    CoffeeService coffeeService;
+    private CoffeeRepository coffeeRepository;
+    @Autowired
+    private TestEntityManager entityManager;
 
-    @BeforeEach
-    private void cleanup(){
-        coffeeRepository.deleteAll();
-    }
-
-    protected CoffeeDTO createValidDTO() {
-        return CoffeeDTO.builder()
-                .price(50)
-                .name("coffee name")
-                .imageUrl("coffee image url")
-                .inStock(true)
-                .description("coffee description")
-                .countryOfOrigin("coffee country of origin")
-                .roastingLevel(2)
-                .bitterness(4)
-                .sweetness(3)
-                .acidity(2)
-                .body(5)
-                .tasteProfile("coffee taste profile")
-                .build();
+    private Coffee uploadCoffeeEntity(){
+        return entityManager.persistAndFlush(createValidCoffeeEntity());
     }
 
     @Test
     public void saveEntity_whenDTOIsValid_receiveDTOBack(){
-        var savedDTO = coffeeService.addCoffee(createValidDTO());
+        var savedDTO = coffeeService.addCoffee(createValidCoffeeDTO());
         assertThat(savedDTO).isNotNull();
     }
 
     @Test
-    public void saveEntity_whenDTOIsNotValid_throwMethodArgumentNotValidException(){
-        assertThrows(TransactionSystemException.class, () -> coffeeService.addCoffee(new CoffeeDTO()));
-    }
-
-    @Test
     public void updateEntity_whenIdIsFoundInDB_updateDTOInDB(){
-        var dto = createValidDTO();
-        var savedDto = coffeeService.addCoffee(dto);
+        var entity = uploadCoffeeEntity();
 
-        savedDto.setName("updated dto");
-        coffeeService.updateCoffeeById(savedDto.getId(), savedDto);
+        var dto = createValidCoffeeDTO();
+        dto.setName("updated dto");
+        coffeeService.updateCoffeeById(entity.getId(), dto);
 
-        Coffee byId = coffeeRepository.findById(savedDto.getId()).orElse(null);
+        Coffee byId = coffeeRepository.findById(entity.getId()).orElse(null);
         assertThat(byId).isNotNull();
         assertThat(byId.getName()).isEqualTo("updated dto");
     }
 
     @Test
     public void updateEntity_whenUpdateIsSuccessful_receiveString(){
-        var dto = createValidDTO();
-        var savedDto = coffeeService.addCoffee(dto);
-        savedDto.setName("updated dto");
-        assertThat(coffeeService.updateCoffeeById(savedDto.getId(), savedDto))
-                .isNotNull().isNotEmpty();
+        var entity = uploadCoffeeEntity();
+
+        var dto = createValidCoffeeDTO();
+        dto.setName("updated dto");
+        var string = coffeeService.updateCoffeeById(entity.getId(), dto);
+
+        assertThat(string).isEqualTo("Updated successfully");
     }
 
     @Test
     public void updateEntity_whenEntityIdIsNotFoundInDB_throwResourceNotFoundException(){
         assertThrows(
                 ResourceNotFoundException.class,
-                () -> coffeeService.updateCoffeeById(1, createValidDTO()));
+                () -> coffeeService.updateCoffeeById(100, createValidCoffeeDTO()));
     }
 
     @Test
     public void getDTO_whenIdIsFoundInDB_receiveDTO(){
-        var savedDTO = coffeeService.addCoffee(createValidDTO());
-        assertThat(coffeeService.getCoffeeById(savedDTO.getId())).isNotNull();
+        var entity = uploadCoffeeEntity();
+        assertThat(coffeeService.getCoffeeById(entity.getId())).isNotNull();
     }
 
     @Test
@@ -99,9 +90,9 @@ public class CoffeeServiceTests {
 
     @Test
     public void deleteEntity_whenIdIsFoundInDB_entityIsDeletedFromDB(){
-        var savedDTO = coffeeService.addCoffee(createValidDTO());
-        coffeeService.deleteById(savedDTO.getId());
-        assertThat(coffeeRepository.findById(savedDTO.getId()).orElse(null)).isNull();
+        var entity = uploadCoffeeEntity();
+        coffeeService.deleteById(entity.getId());
+        assertThat(coffeeRepository.findById(entity.getId()).orElse(null)).isNull();
     }
 
     @Test
@@ -111,22 +102,16 @@ public class CoffeeServiceTests {
     }
 
     @Test
-    public void getAllFromDB_whenThereAreTwoEntities_receiveASetWithTwoDTOs(){
-        var dto1 = coffeeService.addCoffee(createValidDTO());
+    public void getAllFromDB_whenThereAreTwoEntities_receiveAListWithTwoDTOs(){
+        uploadCoffeeEntity();
+        uploadCoffeeEntity();
 
-        var beforeSavedDTO = createValidDTO();
-        beforeSavedDTO.setName("different name");
-
-        var dto2 = coffeeService.addCoffee(beforeSavedDTO);
-        Set<CoffeeDTO> allCoffee = coffeeService.getAllCoffee();
-
-        assertThat(allCoffee.size()).isEqualTo(2);
-        assertThat(allCoffee.containsAll(Set.of(dto1, dto2))).isTrue();
+        assertThat(coffeeRepository.findAll().size()).isEqualTo(2);
     }
 
     @Test
-    public void getAllFromDB_whenThereAreNoEntities_receiveAnEmptySet(){
-        Set<CoffeeDTO> allCoffee = coffeeService.getAllCoffee();
+    public void getAllFromDB_whenThereAreNoEntities_receiveAnEmptyList(){
+        List<CoffeeDTO> allCoffee = coffeeService.getAllCoffee();
         assertThat(allCoffee.size()).isEqualTo(0);
     }
 

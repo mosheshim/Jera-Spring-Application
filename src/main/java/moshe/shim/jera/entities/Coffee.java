@@ -23,6 +23,7 @@ public class Coffee extends ProductModel {
     public static final int MEDIUM_ROAST = 2;
     public static final int DARK_ROAST = 3;
 
+//    TODO make all of them column not null
     @NotNull
     @Column(name = "country_of_origin")
     private String countryOfOrigin;
@@ -52,33 +53,4 @@ public class Coffee extends ProductModel {
     @Range(min = 0, max = 5)
     private Integer body;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        Coffee coffee = (Coffee) o;
-
-        if (!countryOfOrigin.equals(coffee.countryOfOrigin)) return false;
-        if (!roastingLevel.equals(coffee.roastingLevel)) return false;
-        if (!tasteProfile.equals(coffee.tasteProfile)) return false;
-        if (!bitterness.equals(coffee.bitterness)) return false;
-        if (!sweetness.equals(coffee.sweetness)) return false;
-        if (!acidity.equals(coffee.acidity)) return false;
-        return body.equals(coffee.body);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + countryOfOrigin.hashCode();
-        result = 31 * result + roastingLevel.hashCode();
-        result = 31 * result + tasteProfile.hashCode();
-        result = 31 * result + bitterness.hashCode();
-        result = 31 * result + sweetness.hashCode();
-        result = 31 * result + acidity.hashCode();
-        result = 31 * result + body.hashCode();
-        return result;
-    }
 }
