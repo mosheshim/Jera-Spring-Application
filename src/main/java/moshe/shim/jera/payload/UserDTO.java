@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -27,5 +28,7 @@ public class UserDTO {
 
     @Valid
     private AddressDTO address;
+
+    private List<CartItemDTO> cart;
 
 }

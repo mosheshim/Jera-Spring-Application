@@ -22,7 +22,7 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 @Builder
-@Table(name = "Tea_product_series")
+@Table(name = "tea_product_series")
 @Entity
 public class TeaProductSeries {
 

@@ -35,7 +35,7 @@ public class TeaServiceTests extends TeaTestsUtils {
     @Test
     public void saveEntity_whenDTOIsValid_saveEntityInDB() {
         var savedDTO = teaService.addTea(psEntity.getId(), createValidTeaDTO());
-        assertThat(teaRepository.findById(savedDTO.getId())).isNotNull();
+        assertThat(teaRepository.findById(savedDTO.getId())).isNotEmpty();
     }
 
     @Test

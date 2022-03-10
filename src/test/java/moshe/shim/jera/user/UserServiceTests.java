@@ -1,5 +1,6 @@
 package moshe.shim.jera.user;
 
+import moshe.shim.jera.entities.User;
 import moshe.shim.jera.exceptions.ResourceNotFoundException;
 import moshe.shim.jera.exceptions.TokenException;
 import moshe.shim.jera.exceptions.UserExistsException;
@@ -17,7 +18,7 @@ public class UserServiceTests extends UserUtils {
     @Test
     public void saveUser_whenEntityIsValid_haveUserInDB() {
         registerUser();
-        assertThat(userRepository.findUserByEmail(email)).isNotNull();
+        assertThat(userRepository.findUserByEmail(email)).isNotEmpty();
     }
 
     @Test
@@ -29,7 +30,9 @@ public class UserServiceTests extends UserUtils {
     @Test
     public void saveEntity_createTimeStampOnSave_receiveDTOWithUploadDate(){
         var userDTO = registerUser();
-        var user = userRepository.findUserByEmail(userDTO.getEmail()).get();
+        var user = userRepository.findUserByEmail(userDTO.getEmail()).orElse(null);
+
+        assertThat(user).isNotNull();
         assertThat(user.getUploadDate()).isNotNull();
         assertThat(user.getLastLogin()).isNotNull();
     }
@@ -114,9 +117,9 @@ public class UserServiceTests extends UserUtils {
         userService.updateUser(
                 addBearer(userDTO.getJwt()),
                 userDTO);
-
-        assertThat(userRepository.findUserByEmail(userDTO.getEmail()).get()
-                .getAddress()).isNotNull();
+        var user = userRepository.findUserByEmail(userDTO.getEmail()).orElse(null);
+        assertThat(user).isNotNull();
+        assertThat(user.getAddress()).isNotNull();
     }
 
 }

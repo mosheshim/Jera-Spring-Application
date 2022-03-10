@@ -48,7 +48,6 @@ public class User {
     @Embedded
     private Address address;
 
-
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_roles",
@@ -61,6 +60,10 @@ public class User {
                     referencedColumnName = "id"
             )
     )
-    private List<Role> roles ;
+    private List<Role> roles;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<CartItem> cart = List.of();
 
 }

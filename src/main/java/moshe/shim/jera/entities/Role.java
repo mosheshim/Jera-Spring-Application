@@ -3,10 +3,7 @@ package moshe.shim.jera.entities;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @AllArgsConstructor
@@ -14,9 +11,8 @@ import javax.persistence.Id;
 @Builder
 @Getter
 @Setter
+@Table(name = "roles")
 public class Role {
-//    public static final String ROLE_USER = "ROLE_USER";
-//    public static final String ROLE_ADMIN = "ROLE_ADMIN";
     public static final String ADMIN = "ADMIN";
     public static final String USER = "USER";
 

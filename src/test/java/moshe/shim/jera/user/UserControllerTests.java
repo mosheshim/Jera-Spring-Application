@@ -16,10 +16,9 @@ public class UserControllerTests extends UserUtils{
 
     @Override
     protected MockHttpServletResponse putRequest(Object dto, String jwt) throws Exception {
-        jwt = addBearer(jwt);
         return mockMvc.perform(
                         put(prefix + "users")
-                                .header(HttpHeaders.AUTHORIZATION, jwt)
+                                .header(HttpHeaders.AUTHORIZATION, addBearer(jwt))
                                 .content(asString(dto))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON))
@@ -186,19 +185,13 @@ public class UserControllerTests extends UserUtils{
 
     @Test
     public void updateUser_whenAddressIsValid_receiveStatus201() throws Exception{
-        var userDTO = registerUser();
-        var response = putRequest(
-                createValidAddressDTO(),
-                addBearer(userDTO.getJwt()));
+        var response = updateAddress(createValidAddressDTO());
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 
     @Test
     public void updateUser_whenAddressIsValid_receiveString() throws Exception{
-        var userDTO = registerUser();
-        var response = putRequest(
-                createValidAddressDTO(),
-                addBearer(userDTO.getJwt()));
+        var response = updateAddress(createValidAddressDTO());
         assertThat(response.getContentAsString()).isEqualToIgnoringWhitespace("Updated successfully");
     }
 

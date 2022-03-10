@@ -1,4 +1,4 @@
-package moshe.shim.jera.JWT;
+package moshe.shim.jera.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

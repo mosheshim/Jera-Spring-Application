@@ -3,7 +3,6 @@ package moshe.shim.jera.payload;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import moshe.shim.jera.models.ProductDTOModel;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotEmpty;
@@ -18,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = true)
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CoffeeDTO extends ProductDTOModel {
+public class CoffeeDTO extends ProductDTO {
 
     @NotEmpty
     private String countryOfOrigin;

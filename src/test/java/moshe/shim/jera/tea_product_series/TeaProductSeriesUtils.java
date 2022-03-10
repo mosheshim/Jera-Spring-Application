@@ -22,7 +22,6 @@ public class TeaProductSeriesUtils {
         this.entityManager = entityManager;
     }
 
-
     protected TeaProductSeries uploadPsAndTea() {
         var ps = uploadPSEntity();
 

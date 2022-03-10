@@ -3,7 +3,6 @@ package moshe.shim.jera.services.impl;
 import lombok.val;
 import moshe.shim.jera.entities.TeaProductSeries;
 import moshe.shim.jera.exceptions.ResourceNotFoundException;
-import moshe.shim.jera.payload.TeaDTO;
 import moshe.shim.jera.payload.TeaProductSeriesDTO;
 import moshe.shim.jera.repositories.TeaProductSeriesRepository;
 import moshe.shim.jera.services.TeaProductSeriesService;
@@ -38,7 +37,6 @@ public class TeaProductSeriesServiceImpl implements TeaProductSeriesService {
         this.teaService = teaService;
         this.toProductSeries = modelMapper.createTypeMap(TeaProductSeriesDTO.class, TeaProductSeries.class);
         this.toProductSeriesDTO = modelMapper.createTypeMap(TeaProductSeries.class, TeaProductSeriesDTO.class);
-
     }
 
     @Override
@@ -89,10 +87,12 @@ public class TeaProductSeriesServiceImpl implements TeaProductSeriesService {
     }
 
     private TeaProductSeriesDTO findProductSeriesById(long id) {
-        return toProductSeriesDTO.map(psRepository.findById(id)
+        return toProductSeriesDTO.map(
+                psRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Product Series", "Id", id, API_1_COFFEE
                 )));
+
     }
 }
 

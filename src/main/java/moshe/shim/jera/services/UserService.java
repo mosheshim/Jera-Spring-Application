@@ -8,6 +8,5 @@ import moshe.shim.jera.payload.UserDTO;
 public interface UserService {
     UserDTO registerUser(SignUpDTO signUpDTO);
     UserDTO loginUser(LoginDTO loginDTO);
-//    UserDTO addAddress(String jwtFromHeader, AddressDTO dto);
     String updateUser(String bearerToken,UserDTO dto);
 }

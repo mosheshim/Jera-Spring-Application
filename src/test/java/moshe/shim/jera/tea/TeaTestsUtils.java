@@ -27,9 +27,8 @@ public abstract class TeaTestsUtils extends TestsUtils<TeaDTO> {
 
     @BeforeEach
     protected void init(){
-        var ps = createValidPSEntity();
-        entityManager.persistAndFlush(ps);
-        psEntity = ps;
+        psEntity = entityManager.persistAndFlush(createValidPSEntity());
+
     }
 
     @Override

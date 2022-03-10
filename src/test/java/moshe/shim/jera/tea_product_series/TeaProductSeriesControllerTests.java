@@ -21,7 +21,6 @@ public class TeaProductSeriesControllerTests extends TestsUtils<TeaProductSeries
         super(TeaProductSeriesDTO.class, "product-series");
     }
 
-
     @Test
     @WithMockUser(roles = ADMIN)
     public void postPS_whenUserIsAdmin_dontReceiveStatus403() throws  Exception{

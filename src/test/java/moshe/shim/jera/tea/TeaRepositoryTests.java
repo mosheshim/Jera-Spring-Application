@@ -2,6 +2,7 @@ package moshe.shim.jera.tea;
 
 import moshe.shim.jera.entities.Tea;
 import moshe.shim.jera.entities.TeaProductSeries;
+import moshe.shim.jera.repositories.TeaProductSeriesRepository;
 import moshe.shim.jera.repositories.TeaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class TeaRepositoryTests {
     private TestEntityManager entityManager;
     @Autowired
     private TeaRepository teaRepository;
+    @Autowired
+    private TeaProductSeriesRepository psRepository;
 
     private Tea uploadTeaToDB(TeaProductSeries ps){
         Tea teaEntity = createTeaEntity();
@@ -41,6 +44,5 @@ public class TeaRepositoryTests {
         uploadTeaToDB(ps);
         assertThat(teaRepository.findAllByTeaProductSeries(ps).size()).isEqualTo(2);
     }
-
 
 }

@@ -17,20 +17,8 @@ public class UserUtils extends TestsUtils<UserDTO> {
     @Autowired
     protected UserService userService;
 
-    protected final String email = "email@email.com";
-    protected final String password = "Password123";
-
-
     protected UserUtils() {
         super(UserDTO.class, "users");
-    }
-
-    protected String addBearer(String jwt){
-        return "Bearer " + jwt;
-    }
-
-    protected SignUpDTO createValidSignUpDTO() {
-        return new SignUpDTO(email, "name", password);
     }
 
     protected UserDTO registerUser() {

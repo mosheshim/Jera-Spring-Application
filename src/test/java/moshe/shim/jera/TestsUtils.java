@@ -6,10 +6,7 @@ import moshe.shim.jera.entities.Coffee;
 import moshe.shim.jera.entities.Tea;
 import moshe.shim.jera.entities.TeaProductSeries;
 import moshe.shim.jera.entities.Weight;
-import moshe.shim.jera.payload.WeightDTO;
-import moshe.shim.jera.payload.CoffeeDTO;
-import moshe.shim.jera.payload.TeaDTO;
-import moshe.shim.jera.payload.TeaProductSeriesDTO;
+import moshe.shim.jera.payload.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -47,6 +44,10 @@ public abstract class TestsUtils<T> {
     protected TestsUtils(Class<T> type, String defaultEndPoint) {
         this.type = type;
         this.defaultEndPoint = defaultEndPoint;
+    }
+
+    protected String addBearer(String jwt){
+        return "Bearer " + jwt;
     }
 
     protected final ObjectMapper objectMapper = new ObjectMapper();
@@ -211,6 +212,14 @@ public abstract class TestsUtils<T> {
                 .isTeaBag(true)
                 .build();
     }
+
+    public static String email = "email@email.com";
+    public static String password = "Password123!";
+
+    public static SignUpDTO createValidSignUpDTO() {
+        return new SignUpDTO(email, "name", password);
+    }
+
 
 
 }

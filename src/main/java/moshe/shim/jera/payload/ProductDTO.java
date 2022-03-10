@@ -1,11 +1,10 @@
-package moshe.shim.jera.models;
+package moshe.shim.jera.payload;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -17,7 +16,7 @@ import java.util.Date;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public abstract class ProductDTOModel {
+public abstract class ProductDTO {
 
     @JsonIgnore
     protected Long id;
