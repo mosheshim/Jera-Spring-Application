@@ -13,12 +13,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEnti
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static moshe.shim.jera.TestUtils.*;
-import static moshe.shim.jera.TestUtils.createValidPSEntity;
+import static moshe.shim.jera.TestsUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -59,7 +56,13 @@ public class TeaProductSeriesServiceTests  extends TeaProductSeriesUtils{
                 .build();
         var savedPs = psService.addProductSeries(psWithNullUrl);
         assertThat(savedPs.getImageUrl()).isNotNull();
+    }
 
+    @Test
+    public void saveEntity_createTimeStampOnSave_receiveDTOWithUploadDate(){
+        var dto = createValidPSDTO();
+        dto.setUploadDate(null);
+        assertThat(psService.addProductSeries(dto).getUploadDate()).isNotNull();
     }
 
     @Test

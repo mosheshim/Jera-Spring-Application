@@ -47,8 +47,8 @@ public class TeaController {
 
     @PutMapping({"/{id}/weight"})
     public ResponseEntity<String> updateWeight(
-            @PathVariable("id") long productSeriesId ,@Valid  @RequestBody WeightDTO dto) {
-        return new ResponseEntity<>(service.updateWeight(productSeriesId, dto), HttpStatus.NO_CONTENT);
+            @PathVariable("id") long teaId ,@Valid  @RequestBody WeightDTO dto) {
+        return new ResponseEntity<>(service.updateWeight(teaId, dto), HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")

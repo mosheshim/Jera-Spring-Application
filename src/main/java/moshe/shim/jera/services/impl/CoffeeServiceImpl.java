@@ -10,6 +10,7 @@ import org.modelmapper.TypeMap;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,7 +32,9 @@ public class CoffeeServiceImpl implements CoffeeService {
 
     @Override
     public CoffeeDTO addCoffee(CoffeeDTO dto) {
-            return toDTO.map(coffeeRepository.save(toCoffee.map(dto)));
+        var coffee = toCoffee.map(dto);
+        coffee.setUploadDate(new Date());
+        return toDTO.map(coffeeRepository.save(coffee));
     }
 
     @Override
@@ -53,11 +56,11 @@ public class CoffeeServiceImpl implements CoffeeService {
 
     @Override
     public String deleteById(long id) {
-       try {
-           coffeeRepository.deleteById(id);
-       }catch (EmptyResultDataAccessException e){
-           throw new ResourceNotFoundException("Coffee", "id", id, API_1_COFFEE);
-       }
+        try {
+            coffeeRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException("Coffee", "id", id, API_1_COFFEE);
+        }
         return "Deleted Successfully";
     }
 
@@ -67,8 +70,8 @@ public class CoffeeServiceImpl implements CoffeeService {
                 .collect(Collectors.toList());
     }
 
-    private CoffeeDTO findCoffeeById(long id){
-       return toDTO.map(coffeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+    private CoffeeDTO findCoffeeById(long id) {
+        return toDTO.map(coffeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
                 "Coffee", "Id", id, API_1_COFFEE)));
     }
 }

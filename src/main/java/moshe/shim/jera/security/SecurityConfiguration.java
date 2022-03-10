@@ -17,12 +17,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final CustomDetailsService customDetailsService;
-    private final JWTAuthenticationFilter jwtAuthenticationFilter;
+    private final AuthenticationFilter authenticationFilter;
 
     public SecurityConfiguration(
-            CustomDetailsService customDetailsService, JWTAuthenticationFilter jwtAuthenticationFilter) {
+            CustomDetailsService customDetailsService, AuthenticationFilter authenticationFilter) {
         this.customDetailsService = customDetailsService;
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.authenticationFilter = authenticationFilter;
     }
 
 
@@ -33,7 +33,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
 
         http.csrf().disable()
                 .authorizeRequests()
@@ -46,7 +45,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/1/tea/**").permitAll()
                 .antMatchers( "/api/1/tea/**").hasRole("ADMIN")
 
-                .antMatchers("/api/1/auth/**").permitAll()
+                .antMatchers("/api/1/users/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/1/users/**").hasRole("USER")
 
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
@@ -56,7 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .headers().frameOptions().disable()
                 .and()
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

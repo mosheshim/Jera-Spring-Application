@@ -20,6 +20,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Builder
 @Table(name = "Tea_product_series")
 @Entity
@@ -33,7 +34,7 @@ public class TeaProductSeries {
     private String name;
 
     @CreationTimestamp
-    @Column(name = "upload_date", nullable = false)
+    @Column(name = "upload_date", nullable = false, updatable = false)
     protected Date uploadDate;
 
     @NotNull

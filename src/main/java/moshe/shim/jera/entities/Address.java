@@ -1,19 +1,17 @@
 package moshe.shim.jera.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 @Embeddable
 public class Address {
+
     private String city;
 
     private String street;
@@ -29,6 +27,7 @@ public class Address {
 
     private String entrance;
 
-    private String phone;
+//    @OneToOne(mappedBy = "address")
+//    private User user;
 
 }

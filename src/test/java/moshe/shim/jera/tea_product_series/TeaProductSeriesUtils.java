@@ -1,18 +1,14 @@
 package moshe.shim.jera.tea_product_series;
 
-import moshe.shim.jera.TestUtils;
-import moshe.shim.jera.entities.Tea;
 import moshe.shim.jera.entities.TeaProductSeries;
 import moshe.shim.jera.repositories.TeaProductSeriesRepository;
 import moshe.shim.jera.repositories.TeaRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import javax.transaction.Transactional;
 
-import static moshe.shim.jera.TestUtils.createTeaEntity;
-import static moshe.shim.jera.TestUtils.createValidPSEntity;
+import static moshe.shim.jera.TestsUtils.createTeaEntity;
+import static moshe.shim.jera.TestsUtils.createValidPSEntity;
 
 @Transactional
 public class TeaProductSeriesUtils {

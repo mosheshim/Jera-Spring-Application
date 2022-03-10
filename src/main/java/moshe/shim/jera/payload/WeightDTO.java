@@ -2,6 +2,7 @@ package moshe.shim.jera.payload;
 
 import lombok.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor

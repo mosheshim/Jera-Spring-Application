@@ -4,6 +4,10 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import moshe.shim.jera.models.ProductDTOModel;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.*;
 
 @AllArgsConstructor
@@ -13,8 +17,9 @@ import java.util.*;
 @Getter
 public class TeaDTO extends ProductDTOModel {
 
-    @Builder.Default
-    private List<WeightDTO> weights = List.of();
+    @Valid
+    @Size(min = 1)
+    private List<WeightDTO> weights;
 
 
 }

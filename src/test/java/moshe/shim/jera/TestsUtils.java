@@ -22,34 +22,31 @@ import org.springframework.test.web.servlet.MockMvc;
 import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @AutoConfigureTestEntityManager
 @Transactional
-public abstract class TestUtils<T> {
+public abstract class TestsUtils<T> {
+
+    protected final String prefix = "/api/1/";
 
     protected final Class<T> type;
 
-    protected final String path;
-
+    protected final String defaultEndPoint;
     @Autowired
     protected TestEntityManager entityManager;
-
     @Autowired
-    protected MockMvc mockMvc;
+    protected  MockMvc mockMvc;
 
-    protected TestUtils(Class<T> type, String url) {
+    protected TestsUtils(Class<T> type, String defaultEndPoint) {
         this.type = type;
-        this.path = url;
-
+        this.defaultEndPoint = defaultEndPoint;
     }
 
     protected final ObjectMapper objectMapper = new ObjectMapper();
@@ -63,33 +60,46 @@ public abstract class TestUtils<T> {
         return objectMapper.readValue(response.getContentAsString(), type);
     }
 
-    protected MockHttpServletResponse postRequest(T dto) throws Exception {
-        return postRequest(dto, "");
+    protected MockHttpServletResponse postRequest(Object dto) throws Exception {
+        return postRequest(dto, defaultEndPoint);
     }
 
-    protected MockHttpServletResponse postRequest(T dto, String endPoint) throws Exception {
+    protected MockHttpServletResponse postRequest(Object dto, String endPoint) throws Exception {
         return mockMvc.perform(
-                        post(path + endPoint)
+                        post(prefix + endPoint)
                                 .content(asString(dto))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
     }
 
-    protected MockHttpServletResponse getRequest(String url) throws Exception {
+    protected MockHttpServletResponse getRequest(String endPoint) throws Exception {
         return mockMvc
-                .perform(get(url)
+                .perform(get(prefix + endPoint)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+    }
+
+    protected MockHttpServletResponse getRequest(Object dto, String endPoint) throws Exception {
+        return mockMvc
+                .perform(get(prefix + endPoint)
+                        .content(asString(dto))
+                        .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
     }
 
     protected MockHttpServletResponse getRequest() throws Exception {
-        return getRequest(path);
+        return getRequest(defaultEndPoint);
     }
 
-    protected MockHttpServletResponse putRequest(T dto, long id) throws Exception {
+    protected MockHttpServletResponse putRequest(Object dto, long id) throws Exception {
+        return putRequest(dto, defaultEndPoint + "/" + id);
+    }
+
+    protected MockHttpServletResponse putRequest(Object dto, String endPoint) throws Exception {
         return mockMvc
-                .perform(put(String.format("%s/%d", path, id))
+                .perform(put(prefix + endPoint)
                         .content(asString(dto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -98,8 +108,14 @@ public abstract class TestUtils<T> {
 
 
     protected MockHttpServletResponse deleteRequest(long id) throws Exception {
+
+        return deleteRequest(defaultEndPoint + "/" + id);
+    }
+
+    protected MockHttpServletResponse deleteRequest(String endPoint) throws Exception {
+        System.out.println(prefix + endPoint);
         return mockMvc
-                .perform(delete(String.format("%s/%d", path, id))
+                .perform(delete(prefix + endPoint)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
     }

@@ -21,7 +21,7 @@ public abstract class ProductModel {
     protected long id;
 
     @CreationTimestamp
-    @Column(name = "upload_date", nullable = false)
+    @Column(name = "upload_date", nullable = false, updatable = false)
     protected Date uploadDate;
 
     protected Integer price;

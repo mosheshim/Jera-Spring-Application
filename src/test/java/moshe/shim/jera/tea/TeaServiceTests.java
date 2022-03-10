@@ -13,7 +13,7 @@ import java.util.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TeaServiceTest extends TeaTestsUtils {
+public class TeaServiceTests extends TeaTestsUtils {
 
     @Autowired
     private TeaService teaService;
@@ -41,16 +41,16 @@ public class TeaServiceTest extends TeaTestsUtils {
     @Test
     public void saveEntity_whenDTOHasNullWeightAndPrice_throwValidationException() {
         var dto = createValidTeaDTO();
-        dto.setWeights(new ArrayList<>());
+        dto.setWeights(null);
         dto.setPrice(null);
         assertThrows(ValidationException.class, () -> teaService.addTea(psEntity.getId(), dto));
     }
 
     @Test
-    public void saveEntity_whenDTOWeightHasNullFields_throwValidationException() {
+    public void saveEntity_createTimeStampOnSave_receiveDTOWithUploadDate(){
         var dto = createValidTeaDTO();
-        dto.setWeights(List.of(new WeightDTO(null,null,null)));
-        assertThrows(ValidationException.class, () -> teaService.addTea(psEntity.getId(), dto));
+        dto.setUploadDate(null);
+        assertThat(teaService.addTea(psEntity.getId() ,dto).getUploadDate()).isNotNull();
     }
 
     @Test

@@ -1,25 +1,21 @@
 package moshe.shim.jera.coffee;
 
-import moshe.shim.jera.TestUtils;
 import moshe.shim.jera.entities.Coffee;
 import moshe.shim.jera.exceptions.ResourceNotFoundException;
 import moshe.shim.jera.payload.CoffeeDTO;
 import moshe.shim.jera.repositories.CoffeeRepository;
 import moshe.shim.jera.services.CoffeeService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.TransactionSystemException;
 
 import javax.transaction.Transactional;
 import java.util.*;
 
-import static moshe.shim.jera.TestUtils.createValidCoffeeDTO;
-import static moshe.shim.jera.TestUtils.createValidCoffeeEntity;
+import static moshe.shim.jera.TestsUtils.createValidCoffeeDTO;
+import static moshe.shim.jera.TestsUtils.createValidCoffeeEntity;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -43,6 +39,13 @@ public class CoffeeServiceTests{
     public void saveEntity_whenDTOIsValid_receiveDTOBack(){
         var savedDTO = coffeeService.addCoffee(createValidCoffeeDTO());
         assertThat(savedDTO).isNotNull();
+    }
+
+    @Test
+    public void saveEntity_createTimeStampOnSave_receiveDTOWithUploadDate(){
+        var dto = createValidCoffeeDTO();
+        dto.setUploadDate(null);
+        assertThat(coffeeService.addCoffee(dto).getUploadDate()).isNotNull();
     }
 
     @Test

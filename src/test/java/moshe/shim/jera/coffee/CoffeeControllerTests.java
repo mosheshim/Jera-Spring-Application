@@ -1,28 +1,23 @@
 package moshe.shim.jera.coffee;
 
-import moshe.shim.jera.TestUtils;
+import moshe.shim.jera.TestsUtils;
 import moshe.shim.jera.payload.CoffeeDTO;
-import moshe.shim.jera.repositories.CoffeeRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.Date;
-import java.util.List;
 
-import static moshe.shim.jera.controllers.CoffeeController.API_1_COFFEE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class CoffeeControllerTests extends TestUtils<CoffeeDTO> {
+public class CoffeeControllerTests extends TestsUtils<CoffeeDTO> {
 
 
     public CoffeeControllerTests() {
-        super(CoffeeDTO.class, API_1_COFFEE);
+        super(CoffeeDTO.class, "coffee");
     }
 
     @Test
@@ -208,11 +203,6 @@ public class CoffeeControllerTests extends TestUtils<CoffeeDTO> {
         assertThat(getObjFromResponse(response).getUploadDate()).isNotEqualTo(dto.getUploadDate());
     }
 
-    @Test
-    public void getAll_receiveListWithItems() throws Exception {
-        MockHttpServletResponse response = getRequest();
-        assertThat(getObjFromResponse(response)).isNotNull();
-    }
 
     @Test
     @WithMockUser(roles = "ADMIN")
@@ -232,7 +222,7 @@ public class CoffeeControllerTests extends TestUtils<CoffeeDTO> {
     @WithMockUser(roles = "USER")
     public void getDTOById_whenRoleIsNotAdmin_dontReceiveStatus403() throws Exception {
         MockHttpServletResponse response = getRequest(
-                path + "/" + 1);
+                defaultEndPoint + "/" + 1);
         assertThat(response.getStatus()).isNotEqualTo(HttpStatus.FORBIDDEN.value());
     }
 
@@ -241,7 +231,7 @@ public class CoffeeControllerTests extends TestUtils<CoffeeDTO> {
         var entity = entityManager.persistAndFlush(createValidCoffeeEntity());
 
         MockHttpServletResponse getResponse = getRequest(
-                path + "/" + entity.getId());
+                defaultEndPoint + "/" + entity.getId());
 
         assertThat(getObjFromResponse(getResponse)).isNotNull();
     }
@@ -251,14 +241,14 @@ public class CoffeeControllerTests extends TestUtils<CoffeeDTO> {
         var entity = entityManager.persistAndFlush(createValidCoffeeEntity());
 
         MockHttpServletResponse getResponse = getRequest(
-                path + "/" + entity.getId());
+                defaultEndPoint + "/" + entity.getId());
 
         assertThat(getResponse.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 
     @Test
     public void getDTOById_whenIdDoesNotExists_receiveStatus400() throws Exception {
-        MockHttpServletResponse getResponse = getRequest(path + "/" + 100);
+        MockHttpServletResponse getResponse = getRequest(defaultEndPoint + "/" + 100);
         assertThat(getResponse.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 

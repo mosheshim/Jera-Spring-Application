@@ -14,6 +14,7 @@ import org.modelmapper.TypeMap;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 import java.util.stream.Collectors;
@@ -43,6 +44,7 @@ public class TeaProductSeriesServiceImpl implements TeaProductSeriesService {
     @Override
     public TeaProductSeriesDTO addProductSeries(TeaProductSeriesDTO dto) {
         val teaProductSeries = toProductSeries.map(dto);
+        teaProductSeries.setUploadDate(new Date());
         return toProductSeriesDTO.map(psRepository.save(teaProductSeries));
     }
 

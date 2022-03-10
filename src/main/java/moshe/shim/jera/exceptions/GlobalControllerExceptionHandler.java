@@ -45,7 +45,7 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
                 exc.getFieldName(),
                 exc.getFieldValue());
         val error = ErrorDetailsDTO.builder()
-                .status(HttpStatus.NOT_FOUND.value())
+                .status(HttpStatus.BAD_REQUEST.value())
                 .message("Illegal Value")
                 .details(details)
                 .path(exc.getPath())
@@ -64,7 +64,7 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
                 map.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
         val error = ErrorDetailsDTO.builder()
-                .status(status.value())
+                .status(HttpStatus.BAD_REQUEST.value())
                 .message("Validation Error")
                 .details(map)
                 .path(((ServletWebRequest) request).getRequest().getRequestURI())

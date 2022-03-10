@@ -31,6 +31,6 @@ public class Tea extends ProductModel {
     @CollectionTable(name = "weights", joinColumns = @JoinColumn(name = "tea_id"))
     @JoinColumn(name = "tea_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Weight> weights = List.of();
+    private List<Weight> weights;
 
 }

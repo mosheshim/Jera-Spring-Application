@@ -12,7 +12,9 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+
 public class TeaControllerTests extends TeaTestsUtils {
+
 
     @Test
     @WithMockUser(roles = "ADMIN")
@@ -93,7 +95,63 @@ public class TeaControllerTests extends TeaTestsUtils {
     @WithMockUser(roles = "ADMIN")
     public void postDTO_whenWeightsAreNotValid_receiveStatus400() throws Exception {
         var dto = createValidTeaDTO();
-        dto.setWeights(List.of(new WeightDTO(null, null, null)));
+        dto.setWeights(List.of(new WeightDTO()));
+        var response = postRequest(dto);
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void postDTO_whenAWeightDTOWeightIsNull_receiveStatus400() throws Exception {
+        var dto = createValidTeaDTO();
+        dto.getWeights().get(0).setWeight(null);
+        var response = postRequest(dto);
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void postDTO_whenAWeightPriceIsNull_receiveStatus400() throws Exception {
+        var dto = createValidTeaDTO();
+        dto.getWeights().get(0).setPrice(null);
+        var response = postRequest(dto);
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void postDTO_whenAWeightsIsEmpty_receiveStatus400() throws Exception {
+        var dto = createValidTeaDTO();
+        dto.setWeights(List.of());
+        var response = postRequest(dto);
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void postDTO_whenWeightListIsNull_receiveStatus201() throws Exception {
+        var dto = createValidTeaDTO();
+        dto.setWeights(null);
+        dto.setPrice(50);
+        var response = postRequest(dto);
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void postDTO_whenWeightListIsNullAndPriceIsNull_receiveStatus400() throws Exception {
+        var dto = createValidTeaDTO();
+        dto.setWeights(null);
+        dto.setPrice(null);
+        var response = postRequest(dto);
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void postDTO_whenWeightListIsEmpty_receiveStatus400() throws Exception {
+        var dto = createValidTeaDTO();
+        dto.setWeights(List.of());
         var response = postRequest(dto);
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
@@ -123,7 +181,7 @@ public class TeaControllerTests extends TeaTestsUtils {
     @Test
     @WithMockUser(roles = "USER")
     public void getDTOById_whenRoleIsNotAdmin_dontReceiveStatus403() throws Exception {
-        MockHttpServletResponse response = getRequest(path + "/" + 1);
+        MockHttpServletResponse response = getRequest(defaultEndPoint + "/" + 1);
         assertThat(response.getStatus()).isNotEqualTo(HttpStatus.FORBIDDEN.value());
     }
 
@@ -132,7 +190,7 @@ public class TeaControllerTests extends TeaTestsUtils {
         var entity = entityManager.persistAndFlush(createValidTeaEntity());
 
         MockHttpServletResponse getResponse = getRequest(
-                path + "/" + entity.getId());
+                defaultEndPoint + "/" + entity.getId());
 
         var dto = getObjFromResponse(getResponse);
 
@@ -144,21 +202,20 @@ public class TeaControllerTests extends TeaTestsUtils {
         var entity = entityManager.persistAndFlush(createValidTeaEntity());
 
         MockHttpServletResponse getResponse = getRequest(
-                path + "/" + entity.getId());
+                defaultEndPoint + "/" + entity.getId());
 
         assertThat(getResponse.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 
     @Test
-    public void getDTOById_whenIdDoesNotExists_receiveStatus400() throws Exception {
-        MockHttpServletResponse getResponse = getRequest(path + "/" + 100);
+    public void getDTOById_whenIdDoesNotExists_receiveStatus404() throws Exception {
+        MockHttpServletResponse getResponse = getRequest(defaultEndPoint + "/" + 100);
         assertThat(getResponse.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     public void updateEntity_whenUnauthorized_receiveStatus401() throws Exception {
-        MockHttpServletResponse response = putRequest(createValidTeaDTO
-                (), 1);
+        MockHttpServletResponse response = putRequest(createValidTeaDTO(), 1);
         assertThat(response.getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
@@ -223,12 +280,12 @@ public class TeaControllerTests extends TeaTestsUtils {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void updateWeightEntity_whenDTOWeightIsValid_receiveStatus400() throws Exception {
+    public void updateWeightEntity_whenDTOWeightIsValid_receiveStatus204() throws Exception {
         var entity = entityManager.persistAndFlush(createValidTeaEntity());
 
         var weight = new WeightDTO(entity.getWeights().get(0).getWeight(), 1000, false);
 
-        MockHttpServletResponse putResponse = putRequest(weight, entity.getId());
+        MockHttpServletResponse putResponse = putWeightRequest(weight, entity.getId());
 
         assertThat(putResponse.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
@@ -240,7 +297,7 @@ public class TeaControllerTests extends TeaTestsUtils {
 
         var weight = new WeightDTO(entity.getWeights().get(0).getWeight(), 1000, false);
 
-        MockHttpServletResponse putResponse = putRequest(weight, entity.getId());
+        MockHttpServletResponse putResponse = putWeightRequest(weight, entity.getId());
 
         assertThat(putResponse.getContentAsString()).isEqualToIgnoringWhitespace("Updated Successfully");
     }
@@ -258,11 +315,11 @@ public class TeaControllerTests extends TeaTestsUtils {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void updateWeightEntity_whenTeaIsNotFound_receiveStatus404() throws Exception {
+    public void updateWeightEntity_whenWeightIsNotFound_receiveStatus404() throws Exception {
         var entity = entityManager.persistAndFlush(createValidTeaEntity());
 
         var dto = new WeightDTO(1, 50, false);
-        MockHttpServletResponse putResponse = putRequest(dto, entity.getId());
+        MockHttpServletResponse putResponse = putWeightRequest(dto, entity.getId());
 
         assertThat(putResponse.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }

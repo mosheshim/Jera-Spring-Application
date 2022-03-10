@@ -1,13 +1,8 @@
 package moshe.shim.jera.tea_product_series;
 
-import moshe.shim.jera.TestUtils;
-import moshe.shim.jera.entities.TeaProductSeries;
+import moshe.shim.jera.TestsUtils;
 import moshe.shim.jera.payload.TeaProductSeriesDTO;
-import moshe.shim.jera.repositories.TeaProductSeriesRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -15,18 +10,16 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.util.Date;
 import java.util.List;
 
-import static moshe.shim.jera.controllers.TeaProductSeriesController.API_1_PRODUCT_SERIES;
+
+import static moshe.shim.jera.entities.Role.ADMIN;
+import static moshe.shim.jera.entities.Role.USER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class TeaProductSeriesControllerTests extends TestUtils<TeaProductSeriesDTO> {
-
+public class TeaProductSeriesControllerTests extends TestsUtils<TeaProductSeriesDTO> {
 
     protected TeaProductSeriesControllerTests() {
-        super(TeaProductSeriesDTO.class, API_1_PRODUCT_SERIES);
+        super(TeaProductSeriesDTO.class, "product-series");
     }
-
-    private final String ADMIN = "ADMIN";
-    private final String USER = "USER";
 
 
     @Test
@@ -53,6 +46,7 @@ public class TeaProductSeriesControllerTests extends TestUtils<TeaProductSeriesD
     @WithMockUser(roles = ADMIN)
     public void postPS_whenPDIsValid_receiveStatus201() throws  Exception{
         MockHttpServletResponse response = postRequest(createValidPSDTO());
+
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
         assertThat(getObjFromResponse(response)).hasNoNullFieldsOrPropertiesExcept("teaList");
     }
@@ -138,7 +132,7 @@ public class TeaProductSeriesControllerTests extends TestUtils<TeaProductSeriesD
     @Test
     public void getDTOById_whenRoleIsUnauthorized_dontReceiveStatus403() throws Exception {
         MockHttpServletResponse response = getRequest(
-                path + "/" + 1);
+                defaultEndPoint + "/" + 1);
         assertThat(response.getStatus()).isNotEqualTo(HttpStatus.FORBIDDEN.value());
     }
 
@@ -147,7 +141,7 @@ public class TeaProductSeriesControllerTests extends TestUtils<TeaProductSeriesD
         var psEntity = entityManager.persistAndFlush(createValidPSEntity());
 
         MockHttpServletResponse getResponse = getRequest(
-                path + "/" + psEntity.getId());
+                defaultEndPoint + "/" + psEntity.getId());
 
         var psDTO = getObjFromResponse(getResponse);
 
@@ -161,14 +155,14 @@ public class TeaProductSeriesControllerTests extends TestUtils<TeaProductSeriesD
 
 
         MockHttpServletResponse getResponse = getRequest(
-                path + "/" + ps.getId());
+                defaultEndPoint + "/" + ps.getId());
 
         assertThat(getResponse.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 
     @Test
     public void getDTOById_whenIdDoesNotExists_receiveStatus404() throws Exception {
-        MockHttpServletResponse getResponse = getRequest(path + "/" + 100);
+        MockHttpServletResponse getResponse = getRequest(defaultEndPoint + "/" + 100);
         assertThat(getResponse.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 

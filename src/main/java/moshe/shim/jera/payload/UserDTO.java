@@ -1,10 +1,15 @@
 package moshe.shim.jera.payload;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.Setter;
+import lombok.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class UserDTO {
     private long id;
 
@@ -13,9 +18,14 @@ public class UserDTO {
     @JsonIgnore
     private String password;
 
+    @NotEmpty
     private String name;
+
+    private String phone;
 
     private String jwt;
 
+    @Valid
     private AddressDTO address;
+
 }

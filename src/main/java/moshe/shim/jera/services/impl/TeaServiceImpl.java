@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class TeaServiceImpl implements TeaService {
     private final TeaProductSeriesRepository teaProductSeriesRepository;
     private final TypeMap<TeaDTO, Tea> toTea;
     private final TypeMap<Tea, TeaDTO> toDTO;
-    private final TypeMap<WeightDTO,Weight> toWeightDTO;
+    private final TypeMap<WeightDTO, Weight> toWeightDTO;
 
 
     public TeaServiceImpl(
@@ -58,8 +59,9 @@ public class TeaServiceImpl implements TeaService {
 
         val tea = toTea.map(teaDTO);
         tea.setTeaProductSeries(teaProductSeries);
-        val saved = teaRepository.save(tea);
-        return toDTO.map(saved);
+        tea.setUploadDate(new Date());
+
+        return toDTO.map(teaRepository.save(tea));
     }
 
     @Override
@@ -106,15 +108,15 @@ public class TeaServiceImpl implements TeaService {
     }
 
     @Override
-    public String updateWeight(long id , WeightDTO weight) {
+    public String updateWeight(long id, WeightDTO weight) {
         var byId = findTeaById(id);
 
-        if (byId.getWeights().removeIf(w->
-                Objects.equals(w.getWeight(), weight.getWeight()))){
+        if (byId.getWeights().removeIf(w ->
+                Objects.equals(w.getWeight(), weight.getWeight()))) {
 
             byId.getWeights().add(toWeightDTO.map(weight));
             teaRepository.save(byId);
-        }else
+        } else
             throw new ResourceNotFoundException("weights", "weight", weight.getWeight(), API_1_TEA + id);
 
         return "Updated Successfully";
@@ -127,20 +129,11 @@ public class TeaServiceImpl implements TeaService {
     }
 
     private void validateTea(TeaDTO dto) {
-        if (dto.getWeights().isEmpty() && dto.getPrice() == null)
+        if (dto.getWeights() == null && dto.getPrice() == null)
             throw new ValidationException(
                     "Tea cant have no weights and no price",
                     "Price",
                     "null",
-                    API_1_TEA+"/%s/tea");
-        for (WeightDTO weight : dto.getWeights()) {
-            if(weight.getInStock() == null || weight.getWeight() == null)
-                throw new ValidationException(
-                        "Weight cant have null fields",
-                        "weight",
-                        "null",
-                        API_1_TEA+"/%s/tea"
-                );
-        }
+                    API_1_TEA + "/%s/tea");
     }
 }
